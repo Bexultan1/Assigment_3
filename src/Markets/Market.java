@@ -10,21 +10,16 @@ import S.O.L.I.D.GetPhones;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Market {
-    private String MarketName;
+public abstract class Market {
+    protected String MarketName;
     private ArrayList<Laptop> laptops;
     private ArrayList<Headphone> headphones;
     private ArrayList<Phone> phones;
-    public Market(String MarketName){
-        this.MarketName = MarketName;
-    }
-
+    public Market(){}
     public ArrayList<Phone> getPhones() throws SQLException {
         GetPhones getPhones = new GetPhones();
-        return getPhones.getPhonesFromDb(MarketName);
+        return getPhones.getPhonesFromDb(this.getMarketName());
     }
-    public String getMarketName(){return MarketName;}
-
     public ArrayList<Phone> getPhones(String model) throws SQLException {
         GetPhones getPhones = new GetPhones();
         return getPhones.getPhonesFromDb(MarketName,model);
@@ -40,8 +35,9 @@ public class Market {
         GetLaptops getLaptops = new GetLaptops();
         return getLaptops.getLaptopsFromDb(MarketName,model);
     }
-
-
+    public String getMarketName(){
+        return MarketName;
+    }
 
 
     public ArrayList<Headphone> getHeadphones() throws SQLException{

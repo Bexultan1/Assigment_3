@@ -1,6 +1,6 @@
 import Headphones.Headphone;
 import Laptops.Laptop;
-import Markets.Market;
+import Markets.*;
 import Phones.Phone;
 
 import java.sql.*;
@@ -33,15 +33,16 @@ public class Main {
         }
     }
 
-    public Main() throws SQLException {
-    }
-
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws Exception {
         boolean running = true;
+        MarketFactory marketFactory = createMarketByName("alser");
+        Market Alser = marketFactory.createMarket();
 
-        Market Alser = new Market("alser");
-        Market Mechta = new Market("mechta");
-        Market Tehnodom = new Market("tehnodom");
+        marketFactory = createMarketByName("tehnodom");
+        Market Tehnodom = marketFactory.createMarket();
+
+        marketFactory = createMarketByName("mechta");
+        Market Mechta = marketFactory.createMarket();
 
         System.out.println("Welcome to the our marketplace \"Ozimiz Goi\"!");
         System.out.print("Please enter your name : ");
@@ -86,7 +87,7 @@ public class Main {
         }
         System.out.println("What type you wanna see?");
         if (n == 1) {
-            System.out.println("1. Sumsung\n2. Oppo\n3. Iphone\n4. See all\n\n0. Leace");
+            System.out.println("1. Sumsung\n2. Oppo\n3. Iphone\n4. See all\n\n0. Leave");
             int choose = in.nextInt();
             while (choose < 0 || choose > 4) {
                 System.out.print("Please, choose the correct variant :");
@@ -185,4 +186,17 @@ public class Main {
             System.out.println("Headphone was not found");
         }
     }
+    static MarketFactory createMarketByName(String name) throws Exception {
+        if(name.equalsIgnoreCase("alser")){
+            return new AlserMarketFactory();
+        }
+        if(name.equalsIgnoreCase("mechta")){
+            return new MechtaMarketFactory();
+        }
+        if(name.equalsIgnoreCase("tehnodom")){
+            return new TehnodomMarketFactory();
+        }
+        throw new Exception("Wrogn Market Name");
+    }
+
 }
