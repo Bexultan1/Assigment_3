@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class Main {
     private static final Scanner in = new Scanner(System.in);
-    private static final User user = new User();
     private static final String USER = "postgres";
     private static final String PASS = "1234567";
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
@@ -34,6 +33,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
+        User user = User.getInstance();
         boolean running = true;
         MarketFactory marketFactory = createMarketByName("alser");
         Market Alser = marketFactory.createMarket();
@@ -48,7 +48,7 @@ public class Main {
         System.out.print("Please enter your name : ");
         user.setName(in.next());
         System.out.print("Now , enter your balance : ");
-        user.setBalance(in.nextInt());
+        user.topUpBalance(in.nextInt());
         System.out.println("Your data was entered. Enjoy with shopping, " + user.getName() + "!");
         while (running) {
             System.out.println("Now , Choose the market : ");
@@ -65,7 +65,7 @@ public class Main {
                 case 4 -> {
                     System.out.print("Do you have " + user.getBalance() + " dollars, how much do you want to fill it with?");
                     int cash = in.nextInt();
-                    user.setBalance(user.getBalance() + cash);
+                    user.topUpBalance(cash);
                     System.out.println("The money has been successfully deposited into your account!");
                 }
 
@@ -76,6 +76,7 @@ public class Main {
     }
 
     public static void menu(Market market) throws SQLException {
+        User user = User.getInstance();
         System.out.println("What kind of electronic thing u wanna buy?\nIn our shop we have : \n1. Phones\n2. Headphones\n3. Laptops\n0. If you wanna leave");
         int n = in.nextInt();
         while (n > 3 || n < 0) {
@@ -111,7 +112,7 @@ public class Main {
             for (Phone phone : phones) {
                 if (phone.getId() == id) {
                     if (user.getBalance() >= phone.getPrice()) {
-                        user.setBalance(user.getBalance() - phone.getPrice());
+                        user.buyThing(phone.getPrice());
                         System.out.println("Phone was succesfully bought!");
                         System.out.println("You have "+user.getBalance()+" dollars left");
                         String sql = "delete FROM " + market.getMarketName() + ".phones WHERE id = " + phone.getId();
@@ -145,7 +146,7 @@ public class Main {
                         System.out.println("You have "+user.getBalance()+" dollars left");
                         String sql = "delete FROM " + market.getMarketName() + ".headphones WHERE id = " + headphone.getId();
                         statement.executeUpdate(sql);
-                        user.setBalance(user.getBalance() - headphone.getPrice());
+                        user.buyThing(headphone.getPrice());
                         return;
                     } else {
                         System.out.println("You not have not enough money!");
@@ -175,7 +176,7 @@ public class Main {
                         System.out.println("You have "+user.getBalance()+" dollars left");
                         String sql = "delete FROM " + market.getMarketName() + ".laptops WHERE id = " + laptop.getId();
                         statement.executeUpdate(sql);
-                        user.setBalance(user.getBalance() - laptop.getPrice());
+                        user.buyThing(laptop.getPrice());
                         return;
                     } else {
                         System.out.println("You not have not enough money!");

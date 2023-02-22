@@ -1,29 +1,31 @@
 public class User {
-    private String name;
-    private int balance;
+    private static User user;
+    private static String name = "";
+    private static int balance = 0;
 
-    public User(String name , int balance){
-        this.name = name;
-        this.balance = balance;
+    private User(){};
+
+    public static User getInstance(){
+        if(user == null){
+            return new User();
+        }
+        return user;
     }
 
-    public User(){
-
-    };
-
-    public String getName() {
+    public String getName(){
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getBalance() {
+    public int getBalance(){
         return balance;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
+    public void topUpBalance(int money){
+        balance+=money;
+    }
+    public void setName(String name){
+        User.name = name;
+    }
+    public void buyThing(int cash){
+        balance-=cash;
     }
 }
