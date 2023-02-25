@@ -35,14 +35,11 @@ public class Main {
     public static void main(String[] args) throws Exception {
         User user = User.getInstance();
         boolean running = true;
-        MarketFactory marketFactory = createMarketByName("alser");
-        Market Alser = marketFactory.createMarket();
+        Market Alser = createMarketByName("alser").createMarket();
 
-        marketFactory = createMarketByName("tehnodom");
-        Market Tehnodom = marketFactory.createMarket();
+        Market Tehnodom = createMarketByName("tehnodom").createMarket();
 
-        marketFactory = createMarketByName("mechta");
-        Market Mechta = marketFactory.createMarket();
+        Market Mechta = createMarketByName("mechta").createMarket();
 
         System.out.println("Welcome to the our marketplace \"Ozimiz Goi\"!");
         System.out.print("Please enter your name : ");
@@ -197,7 +194,7 @@ public class Main {
         if(name.equalsIgnoreCase("tehnodom")){
             return new TehnodomMarketFactory();
         }
-        throw new Exception("Wrogn Market Name");
+        throw new RuntimeException();
     }
 
 }
